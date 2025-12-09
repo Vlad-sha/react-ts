@@ -50,6 +50,14 @@
     color: var(--text);
 }
 
+.link:hover {
+    color: var(--primary-hover);
+}
+
+.active {
+    color: var(--primary-hover);
+}
+
 .exit {
     margin-top: auto;
     display: flex;
