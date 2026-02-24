@@ -22,14 +22,13 @@ export function Menu () {
 			});
 			const {data} = await axios.get<Product[]>(`${PREFIX}/products`);
 			setProducts(data);
-			setIsLoading(false);
 		} catch (e) {
 			console.error(e);
 			if (e instanceof AxiosError) {
 				setError(e.message);
 			}
+		} finally {
 			setIsLoading(false);
-			return;
 		}
 		// try {
 		// 	const res = await fetch(`${PREFIX}/products`);
