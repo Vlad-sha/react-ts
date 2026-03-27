@@ -10,7 +10,7 @@ import { PREFIX } from './helpers/API.ts';
 import axios from 'axios';
 import { AuthLayout } from './layout/Auth/AuthLayout.tsx';
 import { Login } from './pages/Login/Login.tsx';
-import { Registration } from './pages/Registration/Registration.tsx';
+import { Register } from './pages/Registration/Register.tsx';
 import { RequireAuth } from './helpers/RequireAuth.tsx';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path : 'registration',
-				element : <Registration/>
+				element : <Register/>
 			}
 		]
 	},
