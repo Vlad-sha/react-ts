@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import Headling from '../../components/Headling/Headling';
 import Search from '../../components/Search/Search';
 import { PREFIX } from '../../helpers/API';
@@ -11,16 +11,25 @@ export function Menu () {
 	const [products, setProducts] = useState<Product[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | undefined> (undefined);
+	const [filter, setFilter] = useState<string>();
 
-	const getMenu = async () => {
+	useEffect(() => {
+		getMenu(filter);
+	},[filter]);
+
+	const getMenu = async (name?: string) => {
 		try {
 			setIsLoading(true);
-			await new Promise<void>((resolve) => {
-				setTimeout(() => {
-					resolve();
-				}, 2000);
+			// await new Promise<void>((resolve) => {
+			// 	setTimeout(() => {
+			// 		resolve();
+			// 	}, 2000);
+			// });
+			const {data} = await axios.get<Product[]>(`${PREFIX}/products`,{
+				params: {
+					name
+				}
 			});
-			const {data} = await axios.get<Product[]>(`${PREFIX}/products`);
 			setProducts(data);
 		} catch (e) {
 			console.error(e);
@@ -43,19 +52,22 @@ export function Menu () {
 		// }
 	};
 
-	useEffect(() => {
-		getMenu();
-	},[]);
+	const updateFilter = (e : ChangeEvent<HTMLInputElement>) => {
+		setFilter(e.target.value);
+	};
+
+	
 	return (
 		<>
 			<div className={styles['head']}>
 				<Headling>Menu</Headling>
-				<Search placeholder='Введите блюдо или состав'/>
+				<Search placeholder='Введите блюдо или состав' onChange={updateFilter}/>
 			</div>
 			<div>
 				{error && <>{error}</>}
-				{!isLoading && <MenuList products={products}/>}
+				{!isLoading && products.length > 0 && <MenuList products={products}/>}
 				{isLoading && <>Загружаем продукты ...</>}
+				{!isLoading && products.length === 0 && <>По вашему запросу ничего не найдено</>}
 			</div>
 		</>
 	);
